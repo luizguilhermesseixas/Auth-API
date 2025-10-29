@@ -20,5 +20,6 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src", "../generated/prisma"]
 }
