@@ -21,5 +21,10 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src", "../generated/prisma", "prisma/seed.example.ts"]
+  "include": [
+    "src",
+    "../generated/prisma",
+    "prisma/seed.example.ts",
+    "prisma/seed.ts"
+  ]
 }
