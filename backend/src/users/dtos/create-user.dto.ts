@@ -7,6 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 class CreateAddressDto {
   @IsString()
@@ -54,3 +55,7 @@ export class CreateUserDto {
   @Type(() => CreateAddressDto)
   address?: CreateAddressDto;
 }
+
+export class UpdateUserDto extends PartialType(
+  OmitType(CreateUserDto, ['email', 'password'] as const),
+) {}
