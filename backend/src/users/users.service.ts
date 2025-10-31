@@ -31,11 +31,11 @@ export class UsersService {
     return await this.usersRepository.update(id, updateUserDto);
   }
 
-  async softDeleteUser(id: string): Promise<User> {
+  async softDelete(id: string): Promise<User> {
     return await this.usersRepository.softDelete(id);
   }
 
-  async restoreUser(id: string): Promise<User> {
+  async restore(id: string): Promise<User> {
     return await this.usersRepository.restore(id);
   }
 

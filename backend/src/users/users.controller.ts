@@ -70,4 +70,16 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.delete(id);
   }
+
+  @Patch(':id/soft-delete')
+  @Roles(Role.ADMIN)
+  softDelete(@Param('id') id: string) {
+    return this.usersService.softDelete(id);
+  }
+
+  @Patch(':id/restore')
+  @Roles(Role.ADMIN)
+  async restore(@Param('id') id: string) {
+    return this.usersService.restore(id);
+  }
 }
