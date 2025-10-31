@@ -11,20 +11,26 @@ export class UsersRepository {
     return await this.prisma.user.create({ data });
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.prisma.user.findMany({ include: { address: true } });
-  }
-
-  async findById(id: string): Promise<User | null> {
-    return await this.prisma.user.findUnique({
-      where: { id },
+  async findAll(includeDeleted = false): Promise<User[]> {
+    return await this.prisma.user.findMany({
+      where: includeDeleted ? {} : { deletedAt: null },
       include: { address: true },
     });
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findById(id: string, includeDeleted = false): Promise<User | null> {
     return await this.prisma.user.findUnique({
-      where: { email },
+      where: { id, ...(includeDeleted ? {} : { deletedAt: null }) },
+      include: { address: true },
+    });
+  }
+
+  async findByEmail(
+    email: string,
+    includeDeleted = false,
+  ): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { email, ...(includeDeleted ? {} : { deletedAt: null }) },
       include: { address: true },
     });
   }
@@ -34,6 +40,20 @@ export class UsersRepository {
       where: { id },
       data,
       include: { address: true },
+    });
+  }
+
+  async softDelete(id: string): Promise<User> {
+    return await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
+
+  async restore(id: string): Promise<User> {
+    return await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: null },
     });
   }
 

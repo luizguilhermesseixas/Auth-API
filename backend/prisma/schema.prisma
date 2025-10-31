@@ -22,6 +22,7 @@ model User {
   firstName  String
   lastName   String
   address    Address?
+  deletedAt  DateTime?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
