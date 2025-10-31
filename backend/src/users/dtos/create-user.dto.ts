@@ -5,8 +5,10 @@ import {
   MaxLength,
   IsOptional,
   ValidateNested,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Role } from '../../common/enums/role.enum.js';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 class CreateAddressDto {
@@ -49,6 +51,10 @@ export class CreateUserDto {
   @MinLength(2)
   @MaxLength(100)
   lastName!: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
 
   @IsOptional()
   @ValidateNested()
