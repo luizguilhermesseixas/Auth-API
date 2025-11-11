@@ -7,7 +7,6 @@ import { CreateUserDto, UpdateUserDto } from './dtos/create-user.dto.js';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  // Add user-related business logic here
   async create(createUserDto: CreateUserDto): Promise<User> {
     return await this.usersRepository.create(createUserDto);
   }

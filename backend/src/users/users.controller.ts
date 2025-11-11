@@ -1,4 +1,3 @@
-// users/users.controller.ts
 import {
   Controller,
   Get,
@@ -34,7 +33,7 @@ export class UsersController {
   @Get()
   @Roles(Role.ADMIN, Role.MODERATOR)
   async find(@Query() query: FindUsersQueryDto) {
-    const includeDeleted = query.includedeleted === 'true';
+    const includeDeleted = query.includedeleted ?? false;
 
     if (query.email) {
       const user = await this.usersService.findByEmail(
@@ -53,7 +52,7 @@ export class UsersController {
   @Get(':id')
   @Roles(Role.ADMIN, Role.MODERATOR)
   findOne(@Param('id') id: string, @Query() query: FindUsersQueryDto) {
-    const includeDeleted = query.includedeleted === 'true';
+    const includeDeleted = query.includedeleted ?? false;
     return this.usersService.findById(id, includeDeleted);
   }
 

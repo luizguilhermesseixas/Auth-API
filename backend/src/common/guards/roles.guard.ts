@@ -14,6 +14,7 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
+    // caso nao haja roles definidas, a rota e publica
     if (!requiredRoles) {
       return true;
     }
