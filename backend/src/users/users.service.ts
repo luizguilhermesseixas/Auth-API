@@ -11,17 +11,20 @@ export class UsersService {
     return await this.usersRepository.create(createUserDto);
   }
 
-  async findAll(includeDeleted: boolean): Promise<User[]> {
+  async findAll(includeDeleted: boolean = false): Promise<User[]> {
     return await this.usersRepository.findAll(includeDeleted);
   }
 
-  async findById(id: string, includeDeleted: boolean): Promise<User | null> {
+  async findById(
+    id: string,
+    includeDeleted: boolean = false,
+  ): Promise<User | null> {
     return await this.usersRepository.findById(id, includeDeleted);
   }
 
   async findByEmail(
     email: string,
-    includeDeleted: boolean,
+    includeDeleted: boolean = false,
   ): Promise<User | null> {
     return await this.usersRepository.findByEmail(email, includeDeleted);
   }
