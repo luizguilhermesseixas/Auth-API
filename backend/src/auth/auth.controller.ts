@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -7,17 +8,37 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
-import { User } from 'generated/prisma/index.js';
 import { LocalAuthGuard } from 'src/common/guards/local-auth.guard.js';
+import type { RequestWithUser } from './interfaces/index.js';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard.js';
+import { UsersService } from 'src/users/users.service.js';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Req() req: Request & { user: User }) {
+  async login(@Req() req: RequestWithUser) {
     return await this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getMe(@Req() req: RequestWithUser) {
+    return req.user;
+  }
+
+  // users.controller.ts
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  async getProfile(@Req() req: RequestWithUser) {
+    const user = await this.usersService.findById(req.user.id);
+
+    return user;
   }
 }

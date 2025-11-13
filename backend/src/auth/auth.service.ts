@@ -3,6 +3,7 @@ import { UsersService } from 'src/users/users.service.js';
 import * as bcrypt from 'bcrypt';
 import { User } from 'generated/prisma/index.js';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload, AuthResponse } from './interfaces/index.js';
 
 @Injectable()
 export class AuthService {
@@ -17,15 +18,20 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }
+
     return null;
   }
 
-  async login(user: User) {
-    const payload = { email: user.email, sub: user.id, roles: user.role };
-    const token = await this.jwtService.signAsync(payload);
+  async login(user: User): Promise<AuthResponse> {
+    const payload: JwtPayload = {
+      email: user.email,
+      sub: user.id,
+      roles: user.role,
+    };
+    const access_token = await this.jwtService.signAsync(payload);
 
     return {
-      access_token: token,
+      access_token,
     };
   }
 }
