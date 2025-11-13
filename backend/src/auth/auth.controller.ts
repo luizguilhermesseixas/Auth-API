@@ -8,10 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
-import { LocalAuthGuard } from 'src/common/guards/local-auth.guard.js';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard.js';
 import type { RequestWithUser } from './interfaces/index.js';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard.js';
-import { UsersService } from 'src/users/users.service.js';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard.js';
+import { UsersService } from '../users/users.service.js';
 
 @Controller('auth')
 export class AuthController {
