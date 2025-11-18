@@ -51,21 +51,9 @@ export class UsersRepository {
   }
 
   async update(id: string, data: UpdateUserDto): Promise<User> {
-    const { address, ...userData } = data;
-
     return await this.prisma.user.update({
       where: { id },
-      data: {
-        ...userData,
-        ...(address && {
-          address: {
-            upsert: {
-              create: address,
-              update: address,
-            },
-          },
-        }),
-      },
+      data,
       include: { address: true },
     });
   }

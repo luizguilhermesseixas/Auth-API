@@ -9,29 +9,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Role } from '../../common/enums/role.enum.js';
-import { OmitType, PartialType } from '@nestjs/mapped-types';
-
-class CreateAddressDto {
-  @IsString()
-  @MaxLength(255)
-  street!: string;
-
-  @IsString()
-  @MaxLength(100)
-  city!: string;
-
-  @IsString()
-  @MaxLength(100)
-  state!: string;
-
-  @IsString()
-  @MaxLength(20)
-  zipCode!: string;
-
-  @IsString()
-  @MaxLength(100)
-  country!: string;
-}
+import { CreateAddressDto } from './create-address.dto.js';
 
 export class CreateUserDto {
   @IsEmail()
@@ -62,6 +40,20 @@ export class CreateUserDto {
   address?: CreateAddressDto;
 }
 
-export class UpdateUserDto extends PartialType(
-  OmitType(CreateUserDto, ['email', 'password'] as const),
-) {}
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  lastName?: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
+}
