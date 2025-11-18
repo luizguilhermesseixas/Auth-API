@@ -4,12 +4,9 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  ValidateNested,
   IsEnum,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { Role } from '../../common/enums/role.enum.js';
-import { CreateAddressDto } from './create-address.dto.js';
 
 export class CreateUserDto {
   @IsEmail()
@@ -33,11 +30,6 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role)
   role?: Role;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  address?: CreateAddressDto;
 }
 
 export class UpdateUserDto {

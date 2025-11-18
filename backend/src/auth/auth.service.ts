@@ -4,11 +4,14 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'generated/prisma/index.js';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload, AuthResponse } from './interfaces/index.js';
+import { UsersRepository } from '../users/users.repository.js';
+import { RegisterDto } from './dto/register.dto.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly usersRepository: UsersRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -20,6 +23,11 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async register(registerDto: RegisterDto): Promise<AuthResponse> {
+    const user = await this.usersRepository.create(registerDto);
+    return await this.login(user);
   }
 
   async login(user: User): Promise<AuthResponse> {
