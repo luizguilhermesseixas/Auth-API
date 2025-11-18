@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from './../common/guards/jwt-auth.guard.js';
 import {
   Controller,
   Get,
@@ -19,7 +18,7 @@ import { CreateUserDto, UpdateUserDto } from './dtos/create-user.dto.js';
 import { FindUsersQueryDto } from './dtos/find-users-query.dto.js';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
