@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { UsersService } from '../users/users.service.js';
 import * as bcrypt from 'bcrypt';
 import { User } from 'generated/prisma/index.js';
@@ -7,7 +7,7 @@ import { JwtPayload, AuthResponse } from './interfaces/index.js';
 import { UsersRepository } from '../users/users.repository.js';
 import { RegisterDto } from './dto/register.dto.js';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
