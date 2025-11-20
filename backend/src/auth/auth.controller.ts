@@ -37,6 +37,28 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(
+    @Req() req: RequestWithUser,
+    @Body() body: { refresh_token: string },
+  ) {
+    const decoded = this.authService['jwtService'].decode(body.refresh_token);
+    await this.authService.logout(
+      req.user.id,
+      decoded.sessionId,
+      body.refresh_token,
+    );
+    return { message: 'Logged out successfully' };
+  }
+
+  @Post('logout-all')
+  @HttpCode(HttpStatus.OK)
+  async logoutAll(@Req() req: RequestWithUser) {
+    await this.authService.logoutAll(req.user.id);
+    return { message: 'Logged out from all devices' };
+  }
+
   @Get('me')
   getMe(@Req() req: RequestWithUser) {
     return req.user;
