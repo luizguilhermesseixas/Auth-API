@@ -11,14 +11,18 @@ import {
 import { AuthService } from './auth.service.js';
 import { LocalAuthGuard } from '../common/guards/local-auth.guard.js';
 import type {
+  AuthResponse,
+  MessageResponse,
   RequestWithRefreshUser,
   RequestWithUser,
+  UserResponse,
 } from './interfaces/index.js';
 import { UsersService } from '../users/users.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { Public } from '../common/decorators/public.decorator.js';
 import { JwtRefreshAuthGuard } from '../common/guards/jwt-refresh-auth.guard.js';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard.js';
+import { UserEntity } from '../users/entities/user.entity.js';
 
 @Controller('auth')
 export class AuthController {
@@ -30,7 +34,7 @@ export class AuthController {
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerDto: RegisterDto) {
+  async register(@Body() registerDto: RegisterDto): Promise<AuthResponse> {
     return await this.authService.register(registerDto);
   }
 
@@ -38,14 +42,14 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Req() req: RequestWithUser) {
+  async login(@Req() req: RequestWithUser): Promise<AuthResponse> {
     return await this.authService.login(req.user);
   }
 
   @UseGuards(JwtRefreshAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  async logout(@Req() req: RequestWithRefreshUser) {
+  async logout(@Req() req: RequestWithRefreshUser): Promise<MessageResponse> {
     await this.authService.logout(
       req.user.id,
       req.user.sessionId,
@@ -57,29 +61,29 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout-all')
   @HttpCode(HttpStatus.OK)
-  async logoutAll(@Req() req: RequestWithUser) {
+  async logoutAll(@Req() req: RequestWithUser): Promise<MessageResponse> {
     await this.authService.logoutAll(req.user.id);
     return { message: 'Logged out from all devices' };
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  getMe(@Req() req: RequestWithUser) {
+  getMe(@Req() req: RequestWithUser): UserResponse {
     return req.user;
   }
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  async getProfile(@Req() req: RequestWithUser) {
+  async getProfile(@Req() req: RequestWithUser): Promise<UserResponse> {
     const user = await this.usersService.findById(req.user.id);
 
-    return user;
+    return new UserEntity(user);
   }
 
   @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Req() req: RequestWithRefreshUser) {
+  async refresh(@Req() req: RequestWithRefreshUser): Promise<AuthResponse> {
     return await this.authService.refresh(
       req.user.id,
       req.user.sessionId,
