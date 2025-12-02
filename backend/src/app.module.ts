@@ -8,7 +8,6 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RedisModule } from './redis/redis.module.js';
-import { RedisModule } from './redis/redis.module.js';
 
 @Module({
   imports: [

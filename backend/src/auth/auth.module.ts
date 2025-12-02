@@ -7,7 +7,8 @@ import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
 import { AuthController } from './auth.controller.js';
-import { RedisModule } from 'src/redis/redis.module.js';
+import { RedisModule } from '../redis/redis.module.js';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy.js';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { RedisModule } from 'src/redis/redis.module.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
 })
 export class AuthModule {}

@@ -5,3 +5,7 @@ export interface JwtPayload {
   sub: string;
   roles: Role;
 }
+
+export interface JwtRefreshPayload extends JwtPayload {
+  sessionId: string;
+}
